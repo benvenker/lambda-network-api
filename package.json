@@ -1,0 +1,29 @@
+{
+  "name": "lambda-network-api",
+  "version": "1.0.0",
+  "description": "API for the webPT16 group Lambda Network App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WebPT16/lambda-network-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WebPT16/lambda-network-api/issues"
+  },
+  "homepage": "https://github.com/WebPT16/lambda-network-api#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jwks-rsa": "^1.8.1",
+    "moment": "^2.27.0",
+    "nodemon": "^2.0.4",
+    "uuid": "^8.2.0"
+  }
+}
