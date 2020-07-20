@@ -1,12 +1,12 @@
 const express = require('express');
-const posts = require('./postsDb.js');
+const usersSkills = require('../models/usersSkillsDb.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  return posts
+  return usersSkills
     .get()
-    .then(posts => res.status(200).json({ posts }))
+    .then(usersSkills => res.status(200).json(usersSkills))
     .catch(err => res.status(500).json({ msg: err }));
 });
 

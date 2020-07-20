@@ -3,19 +3,19 @@ require('dotenv').config();
 const express = require('express');
 const server = express();
 const port = process.env.PORT || 3001;
-const usersRouter = require('./users/usersRouter');
-const postsRouter = require('./posts/postsRouter');
-const commentsRouter = require('./comments/commentsRouter');
-const awardsRouter = require('./awards/awardsRouter');
-const commentFlagsRouter = require('./comment_flags/commentFlagsRouter');
-const followsRouter = require('./follows/followsRouter');
-const jobsRouter = require('./jobs/jobsRouter');
-const postAwardsRouter = require('./post_awards/postAwardsRouter');
-const postFlagsRouter = require('./post_flags/postFlagsRouter');
+const usersRouter = require('./routes/usersRouter');
+const postsRouter = require('./routes/postsRouter');
+const commentsRouter = require('./routes/commentsRouter');
+const awardsRouter = require('./routes/awardsRouter');
+const commentFlagsRouter = require('./routes/commentFlagsRouter');
+const followsRouter = require('./routes/followsRouter');
+const jobsRouter = require('./routes/jobsRouter');
+const postAwardsRouter = require('./routes/postAwardsRouter');
+const postFlagsRouter = require('./routes/postFlagsRouter');
 
-const skillsRouter = require('./skills/skillsRouter');
-const usersSkillsRouter = require('./users_skills/usersSkillsRouter');
-const votesRouter = require('./votes/votesRouter');
+const skillsRouter = require('./routes/skillsRouter');
+const usersSkillsRouter = require('./routes/usersSkillsRouter');
+const votesRouter = require('./routes/votesRouter');
 
 server.use(express.json());
 
@@ -32,7 +32,6 @@ server.use('/follows', followsRouter);
 server.use('/jobs', jobsRouter);
 server.use('/post-awards', postAwardsRouter);
 server.use('/post-flags', postFlagsRouter);
-
 server.use('/skills', skillsRouter);
 server.use('/users-skills', usersSkillsRouter);
 server.use('/votes', votesRouter);

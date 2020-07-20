@@ -1,12 +1,12 @@
 const express = require('express');
-const comments = require('./commentsDb.js');
+const follows = require('../models/followsDb.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  return comments
+  return follows
     .get()
-    .then(comments => res.status(200).json({ comments }))
+    .then(follows => res.status(200).json(follows))
     .catch(err => res.status(500).json({ msg: err }));
 });
 

@@ -2,7 +2,7 @@
 // TO THE DATABASE
 // require('dotenv').config();
 const faker = require('faker');
-const db = require('./data/dbConfig.js');
+const db = require('../data/dbConfig.js');
 
 // If you need more data in a particular entity, you can comment
 // out the respective function and it will update the data.

@@ -1,5 +1,5 @@
 const express = require('express');
-const votes = require('./votesDb.js');
+const votes = require('../models/votesDb.js');
 
 const router = express.Router();
 
