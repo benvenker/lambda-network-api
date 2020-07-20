@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   return commentFlags
     .get()
-    .then(commentFlags => res.status(200).json({ commentFlags }))
+    .then(commentFlags => res.status(200).json(commentFlags))
     .catch(err => res.status(500).json({ msg: err }));
 });
 

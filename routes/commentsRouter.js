@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   return comments
     .get()
-    .then(comments => res.status(200).json({ comments }))
+    .then(comments => res.status(200).json(comments))
     .catch(err => res.status(500).json({ msg: err }));
 });
 
