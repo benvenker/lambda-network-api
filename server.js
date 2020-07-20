@@ -5,6 +5,7 @@ const server = express();
 const port = process.env.PORT || 3001;
 const usersRouter = require('./users/usersRouter');
 const postsRouter = require('./posts/postsRouter');
+const commentsRouter = require('./comments/commentsRouter');
 
 server.use(express.json());
 
@@ -14,4 +15,6 @@ server.get('/', (req, res) => {
 
 server.use('/users', usersRouter);
 server.use('/posts', postsRouter);
+server.use('/comments', commentsRouter);
+
 module.exports = { server, port };
