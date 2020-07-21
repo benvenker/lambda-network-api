@@ -1,12 +1,12 @@
 const express = require('express');
-const skills = require('../models/skillsDb.js');
+const postAwards = require('../models/postAwards.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  return skills
+  return postAwards
     .get()
-    .then(skills => res.status(200).json(skills))
+    .then(postAwards => res.status(200).json(postAwards))
     .catch(err => res.status(500).json({ msg: err }));
 });
 

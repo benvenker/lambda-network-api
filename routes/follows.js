@@ -1,12 +1,12 @@
 const express = require('express');
-const votes = require('../models/votesDb.js');
+const follows = require('../models/follows.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  return votes
+  return follows
     .get()
-    .then(votes => res.status(200).json(votes))
+    .then(follows => res.status(200).json(follows))
     .catch(err => res.status(500).json({ msg: err }));
 });
 

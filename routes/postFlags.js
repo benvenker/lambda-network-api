@@ -1,12 +1,12 @@
 const express = require('express');
-const posts = require('../models/postsDb.js');
+const postFlags = require('../models/postFlags.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  return posts
+  return postFlags
     .get()
-    .then(posts => res.status(200).json(posts))
+    .then(postFlags => res.status(200).json(postFlags))
     .catch(err => res.status(500).json({ msg: err }));
 });
 

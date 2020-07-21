@@ -4,18 +4,18 @@ const express = require('express');
 const server = express();
 const port = process.env.PORT || 3001;
 
-const awardsRouter = require('./routes/awardsRouter');
-const commentsRouter = require('./routes/commentsRouter');
-const commentFlagsRouter = require('./routes/commentFlagsRouter');
-const followsRouter = require('./routes/followsRouter');
-const jobsRouter = require('./routes/jobsRouter');
-const postsRouter = require('./routes/postsRouter');
-const postAwardsRouter = require('./routes/postAwardsRouter');
-const postFlagsRouter = require('./routes/postFlagsRouter');
-const skillsRouter = require('./routes/skillsRouter');
-const usersRouter = require('./routes/usersRouter');
-const usersSkillsRouter = require('./routes/usersSkillsRouter');
-const votesRouter = require('./routes/votesRouter');
+const awardsRouter = require('./routes/awards');
+const commentsRouter = require('./routes/comments');
+const commentFlagsRouter = require('./routes/commentFlags');
+const followsRouter = require('./routes/follows');
+const jobsRouter = require('./routes/jobs');
+const postsRouter = require('./routes/post');
+const postAwardsRouter = require('./routes/postAwards');
+const postFlagsRouter = require('./routes/postFlags');
+const skillsRouter = require('./routes/skills');
+const usersRouter = require('./routes/users');
+const usersSkillsRouter = require('./routes/usersSkills');
+const votesRouter = require('./routes/votes');
 
 server.use(express.json());
 

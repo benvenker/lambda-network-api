@@ -1,12 +1,12 @@
 const express = require('express');
-const commentFlags = require('../models/commentFlagsDb.js');
+const comments = require('../models/comments.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  return commentFlags
+  return comments
     .get()
-    .then(commentFlags => res.status(200).json(commentFlags))
+    .then(comments => res.status(200).json(comments))
     .catch(err => res.status(500).json({ msg: err }));
 });
 

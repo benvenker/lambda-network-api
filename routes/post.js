@@ -1,12 +1,12 @@
 const express = require('express');
-const comments = require('../models/commentsDb.js');
+const posts = require('../models/posts.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  return comments
+  return posts
     .get()
-    .then(comments => res.status(200).json(comments))
+    .then(posts => res.status(200).json(posts))
     .catch(err => res.status(500).json({ msg: err }));
 });
 
