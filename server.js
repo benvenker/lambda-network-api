@@ -1,8 +1,6 @@
-// Create the server!
 require('dotenv').config();
 const express = require('express');
 const server = express();
-const port = process.env.PORT || 3001;
 
 const awardsRouter = require('./routes/awards');
 const commentsRouter = require('./routes/comments');
@@ -19,10 +17,6 @@ const votesRouter = require('./routes/votes');
 
 server.use(express.json());
 
-server.get('/', (req, res) => {
-  res.send('<h1>Welcome the Lambda Netork API!</h1>');
-});
-
 server.use('/awards', awardsRouter);
 server.use('/comments', commentsRouter);
 server.use('/comment-flags', commentFlagsRouter);
@@ -36,4 +30,8 @@ server.use('/users', usersRouter);
 server.use('/users-skills', usersSkillsRouter);
 server.use('/votes', votesRouter);
 
-module.exports = { server, port };
+server.get('/', (req, res) => {
+  res.status(200).json({ api: 'running' });
+});
+
+module.exports = server;

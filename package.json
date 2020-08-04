@@ -4,7 +4,7 @@
   "description": "API for the webPT16 group Lambda Network App",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watch --verbose",
     "start": "nodemon index.js"
   },
   "repository": {
@@ -24,11 +24,16 @@
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "faker": "^4.1.0",
+    "jest": "^26.1.0",
     "jwks-rsa": "^1.8.1",
     "knex": "^0.21.2",
     "moment": "^2.27.0",
     "nodemon": "^2.0.4",
     "pg": "^8.3.0",
+    "supertest": "^4.0.2",
     "uuid-1345": "^1.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
