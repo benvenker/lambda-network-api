@@ -14,7 +14,7 @@ router.get('/followers/:followedId', (req, res) => {
   const { followedId } = req.params;
   console.log(followedId);
   return users
-    .getFollowersByFollowedId(followedId)
+    .getAllUsersAUserIsFollowing(followedId)
     .then(followers => {
       if (followers) {
         console.log(followers);

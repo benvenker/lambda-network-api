@@ -2,14 +2,14 @@ const db = require('../data/dbConfig.js');
 
 module.exports = {
   get,
-  getFollowersByFollowedId,
+  getAllUsersAUserIsFollowing,
 };
 
 function get() {
   return db('users');
 }
 
-function getFollowersByFollowedId(followedId) {
+function getAllUsersAUserIsFollowing(followedId) {
   return db.raw(
     `
     select u.email
