@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.get('/followers/:followedId', (req, res) => {
+router.get('/following/:followedId', (req, res) => {
   const { followedId } = req.params;
   console.log(followedId);
   return users
@@ -23,5 +23,7 @@ router.get('/followers/:followedId', (req, res) => {
     })
     .catch(err => console.log(err));
 });
+
+router.get('/')
 
 module.exports = router;
