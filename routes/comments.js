@@ -17,10 +17,23 @@ router.get('/post/:postId', (req, res) => {
     .then(comment => {
       if (comment) {
         console.log(comment);
-        res.status(200).json(comment.rows);
+        res.status(200).json(comment);
       }
     })
     .catch(err => console.log(err));
 });
+
+router.get('/user/:userId', (req, res) => {
+  const {userId} = req.params;
+  return comments
+    .getCommentsByUserId(userId)
+    .then(comment => {
+      if (comment) {
+        console.log(comment);
+        res.status(200).json(comment);
+      }
+    })
+    .catch(err => console.log(err))
+})
 
 module.exports = router;
