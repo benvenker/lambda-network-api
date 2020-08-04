@@ -18,12 +18,12 @@ router.get('/following/:followedId', (req, res) => {
     .then(followers => {
       if (followers) {
         console.log(followers);
-        res.status(200).json(followers.rows);
+        res.status(200).json(followers);
       }
     })
     .catch(err => console.log(err));
 });
 
-router.get('/')
+router.get('/');
 
 module.exports = router;
