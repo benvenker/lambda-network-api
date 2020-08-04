@@ -5,7 +5,15 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   return posts
-    .get()
+    .then(posts => res.status(200).json(posts))
+    .catch(err => res.status(500).json({ msg: err }));
+});
+
+router.get('/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  return posts
+    .getPostsByUserId(userId)
     .then(posts => res.status(200).json(posts))
     .catch(err => res.status(500).json({ msg: err }));
 });

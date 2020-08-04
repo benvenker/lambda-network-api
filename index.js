@@ -1,5 +1,7 @@
 // Application entry point
-const { server, port } = require('./server');
+require('dotenv').config();
+const server = require('./server');
+const port = process.env.PORT || 3001;
 
 server.listen(port, () => {
   console.log(`Server running on port ${port}`);

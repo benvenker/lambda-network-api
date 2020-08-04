@@ -2,7 +2,7 @@
 // TO THE DATABASE
 // require('dotenv').config();
 const faker = require('faker');
-const db = require('../data/dbConfig.js');
+const db = require('./data/dbConfig');
 
 // If you need more data in a particular entity, you can comment
 // out the respective function and it will update the data.
@@ -10,7 +10,7 @@ const db = require('../data/dbConfig.js');
 // TODO: Make each function take a number of records as an argument
 
 // populateAwards(); // Has array in the function providing data
-populateUsers(10);
+// populateUsers(10);
 // populatePosts(100);
 // populateComments(100);
 // populateVotes(100);
@@ -124,3 +124,27 @@ async function populateVotes(rows) {
     }, 1000);
   }
 }
+
+async function populateFollows(rows) {
+  const users = await db.select('id').from('users');
+  for (i = 0; i <= rows; i++) {
+    setTimeout(async () => {
+      const follower = users[Math.floor(Math.random() * users.length) + 1].id;
+      const followed = users[Math.floor(Math.random() * users.length) + 1].id;
+
+      const follow = {
+        follower_id: follower,
+        followed_id: followed,
+        following_date: faker.date.past(),
+      };
+
+      // console.log(follow);
+      return db('follows')
+        .insert(follow)
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }, 1000);
+  }
+}
+
+populateFollows(100);
