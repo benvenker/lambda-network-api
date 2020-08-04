@@ -24,7 +24,7 @@ function getCommentByPostId(postId) {
     where c.parent_comment_id = c.id
 )
 from comments c
-where c.post_id = '451e5a6f-c611-4113-a2c9-9e932999aba3'
+where c.post_id = '${postId}'
     `
   );
 }
