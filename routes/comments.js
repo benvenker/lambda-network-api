@@ -17,7 +17,7 @@ router.get('/post/:postId', (req, res) => {
     .then(comment => {
       if (comment) {
         console.log(comment);
-        res.status(200).json(comment.rows);
+        res.status(200).json(comment);
       }
     })
     .catch(err => console.log(err));

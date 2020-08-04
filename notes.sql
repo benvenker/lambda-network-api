@@ -1,4 +1,3 @@
-
 -- * get comments by post Id
 -- Get comments with comment, vote, and award counts
 select (
@@ -17,9 +16,11 @@ select (
 from comments c
 where c.post_id = '451e5a6f-c611-4113-a2c9-9e932999aba3'
 
--- * get followers by follwed Id
--- Get emails for a users that a user is following
-select u.email, f.followed_id
+
+ -- * get followers by follwed Id
+    -- Get emails for a users that a user is following
+select u.email,
+    f.followed_id
 from follows f
-join users u on u.id = f.followed_id
+    join users u on u.id = f.followed_id
 where f.follower_id = 'dbe86e29-34d6-436a-bb98-3e71fc65a24c'
