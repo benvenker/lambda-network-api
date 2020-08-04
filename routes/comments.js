@@ -10,4 +10,17 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ msg: err }));
 });
 
+router.get('/post/:postId', (req, res) => {
+  const { postId } = req.params;
+  return comments
+    .getCommentByPostId(postId)
+    .then(comment => {
+      if (comment) {
+        console.log(comment);
+        res.status(200).json(comment.rows);
+      }
+    })
+    .catch(err => console.log(err));
+});
+
 module.exports = router;
