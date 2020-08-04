@@ -4,6 +4,7 @@ const { post } = require('../routes/users.js');
 module.exports = {
   get,
   getCommentByPostId,
+  getCommentsByUserId,
 };
 
 function get() {
@@ -53,3 +54,18 @@ function getCommentByPostId(postId) {
     .where('comments.post_id', postId)
     .join('posts', 'posts.id', 'comments.post_id');
 }
+
+function getCommentsByUserId(userId) {
+  return db
+    .select(
+      'comments.id',
+      'users.email',
+      'comments.body',
+      'comments.created_date'
+    )
+    .from('comments')
+    .where('comments.user_id', userId)
+    .join('users', 'users.id', 'comments.user_id');
+}
+// -- Get comments by userId
+// select * from comments where comments.user_id = 'dbe86e29-34d6-436a-bb98-3e71fc65a24c';
