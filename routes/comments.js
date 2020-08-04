@@ -23,4 +23,6 @@ router.get('/post/:postId', (req, res) => {
     .catch(err => console.log(err));
 });
 
+router.get('/user/:id', (req, res))
+
 module.exports = router;

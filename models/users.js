@@ -9,17 +9,6 @@ function get() {
   return db('users');
 }
 
-// function getAllUsersAUserIsFollowing(followedId) {
-//   return db.raw(
-//     `
-//     select u.email
-// from follows f
-// join users u on u.id = f.followed_id
-// where f.follower_id = '${followedId}'
-//     `
-//   );
-// }
-
 function getAllUsersAUserIsFollowing(followedId) {
   const followedIdIdentifier = db.ref('followed_id').withSchema('follows');
   return db
