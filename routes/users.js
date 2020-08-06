@@ -30,7 +30,7 @@ router.get('/following/:followedId', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { email } = req.params;
+  const { email } = req.body;
   if (!email) {
     res.status(404).json({ message: 'Please include a email' });
   }

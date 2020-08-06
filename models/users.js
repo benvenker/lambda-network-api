@@ -24,7 +24,7 @@ function createUser(email) {
   const user = {
     id: UUID.v4(),
     email: email,
-    created_date: Date.now(),
+    created_date: new Date(),
     permission_type: 'user',
   };
 
@@ -33,7 +33,7 @@ function createUser(email) {
     .then(rows => {
       if (rows.length === 0) {
         // no matching user records found
-        return db('users').insert(user);
+        return db('users').insert(user.rowCount);
       } else {
         throw new Error('The user already exists :)');
       }
