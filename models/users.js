@@ -5,10 +5,16 @@ module.exports = {
   get,
   getAllUsersAUserIsFollowing,
   createUser,
+  getUserById,
+  updateProfileData,
 };
 
 function get() {
   return db('users');
+}
+
+function getUserById(id) {
+  return db('users').where({ id: id });
 }
 
 function getAllUsersAUserIsFollowing(followedId) {
@@ -39,4 +45,10 @@ function createUser(email) {
       }
     })
     .catch(err => console.log(err));
+}
+
+function updateProfileData(profileData) {
+  const { id } = profileData;
+
+  return db('users').update(profileData).where({ id });
 }
