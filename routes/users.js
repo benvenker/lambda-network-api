@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   return users
     .get()
     .then(users => res.status(200).json(users))
-    .catch(err => console.log(err));
+    .catch(err => res.status(500).json({ message: 'Server error' }));
 });
 
 router.get('/:id', (req, res) => {
@@ -23,21 +23,80 @@ router.get('/:id', (req, res) => {
         res.status(200).json(user);
       }
     })
-    .catch(err => res.status(500).json({ message: `Server error: ${err}` }));
+    .catch(err => res.status(500).json({ message: `Server error` }));
 });
 
-router.get('/following/:followedId', (req, res) => {
-  const { followedId } = req.params;
-  console.log(followedId);
+// Get all users a user is following
+router.get('/following/:userId', (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
   return users
-    .getAllUsersAUserIsFollowing(followedId)
+    .getAllUsersAUserIsFollowing(userId)
     .then(followers => {
-      if (followers) {
+      if (!followers) {
+        res.status(404).json({ message: 'No followers found' });
+      } else if (followers) {
         console.log(followers);
         res.status(200).json(followers);
       }
     })
-    .catch(err => res.status(500).json({ message: `Server error: ${err}` }));
+    .catch(err => res.status(500).json({ message: `Server error` }));
+});
+
+// Get count of all users a user is following
+router.get('/following-count/:userId', (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
+  return users
+    .getCountOfAllAUsersFollowers(userId)
+    .then(followers => {
+      if (!followers) {
+        res.status(404).json({ message: 'No followers found' });
+      } else if (followers) {
+        console.log(followers);
+        res.status(200).json(followers);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: `Server error: ${err}` });
+    });
+});
+
+// Get all of a user's followers
+router.get('/followers/:userId', (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
+  return users
+    .getAllAUsersFollowers(userId)
+    .then(followers => {
+      if (!followers) {
+        res.status(404).json({ message: 'No followers found' });
+      } else if (followers) {
+        res.status(200).json(followers);
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: `Server error` });
+    });
+});
+
+// Get the count of all of a user's followers
+router.get('/followers-count/:userId', (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
+  return users
+    .getCountOfAllAUsersFollowers(userId)
+    .then(followers => {
+      if (!followers) {
+        res.status(404).json({ message: 'No followers found' });
+      } else if (followers) {
+        res.status(200).json(followers);
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: `Server error ${err}` });
+    });
 });
 
 router.post('/', (req, res) => {
@@ -56,9 +115,7 @@ router.post('/', (req, res) => {
       }
     })
     .catch(err => {
-      res
-        .status(500)
-        .json({ message: `User creation encounted an error: ${err}` });
+      res.status(500).json({ message: `User creation encounted an error` });
     });
 });
 
@@ -73,13 +130,16 @@ router.put('/:id', async (req, res) => {
     res.status(404).json({ message: 'No user was found' });
   }
 
-  return users.updateProfileData(body).then(profile => {
-    if (!profile) {
-      res.status(500).json({ message: 'Error updating profile' });
-    } else {
-      res.status(200).json(profile);
-    }
-  });
+  return users
+    .updateProfileData(body)
+    .then(profile => {
+      if (!profile) {
+        res.status(404).json({ message: 'No profile found' });
+      } else {
+        res.status(200).json(profile);
+      }
+    })
+    .catch(err => res.status(500).json({ message: 'Server error' }));
 });
 
 module.exports = router;

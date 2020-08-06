@@ -4,6 +4,9 @@ const UUID = require('uuid-1345');
 module.exports = {
   get,
   getAllUsersAUserIsFollowing,
+  getAllAUsersFollowers,
+  getCountOfAllAUsersFollowers,
+  getCountOfAllUsersAUserIsFollowing,
   createUser,
   getUserById,
   updateProfileData,
@@ -24,6 +27,33 @@ function getAllUsersAUserIsFollowing(followedId) {
     .from('follows')
     .where('follows.follower_id', followedId)
     .join('users', 'users.id', followedIdIdentifier);
+}
+
+function getCountOfAllUsersAUserIsFollowing(followedId) {
+  const followedIdIdentifier = db.ref('followed_id').withSchema('follows');
+  return db
+    .count('users.email')
+    .from('follows')
+    .where('follows.follower_id', followedId)
+    .join('users', 'users.id', followedIdIdentifier);
+}
+
+function getAllAUsersFollowers(followerId) {
+  const followerIdIdentifier = db.ref('follower_id').withSchema('follows');
+  return db
+    .select('users.email')
+    .from('follows')
+    .where('follows.followed_id', followerId)
+    .join('users', 'users.id', followerIdIdentifier);
+}
+
+function getCountOfAllAUsersFollowers(followerId) {
+  const followerIdIdentifier = db.ref('follower_id').withSchema('follows');
+  return db
+    .count('users.email')
+    .from('follows')
+    .where('follows.followed_id', followerId)
+    .join('users', 'users.id', followerIdIdentifier);
 }
 
 function createUser(email) {
