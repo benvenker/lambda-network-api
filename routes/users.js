@@ -39,10 +39,16 @@ router.post('/', (req, res) => {
     .then(user => {
       if (user) {
         console.log(user);
-        res.status(200).json(user);
+        res
+          .status(200)
+          .json({ message: `user successfully created!`, userId: user[0] });
       }
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: `User creation encounted an error: ${err}` });
+    });
 });
 
 module.exports = router;

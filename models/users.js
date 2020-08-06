@@ -33,7 +33,7 @@ function createUser(email) {
     .then(rows => {
       if (rows.length === 0) {
         // no matching user records found
-        return db('users').insert(user.rowCount);
+        return db('users').insert(user, 'id');
       } else {
         throw new Error('The user already exists :)');
       }
