@@ -43,7 +43,7 @@ router.get('/following/:userId', (req, res) => {
     .catch(err => res.status(500).json({ message: `Server error` }));
 });
 
-// Get count of all users a user is following
+// Get the count of all the users a user is following
 router.get('/following-count/:userId', (req, res) => {
   const { userId } = req.params;
   console.log(userId);
@@ -103,20 +103,21 @@ router.post('/', (req, res) => {
   const { email } = req.body;
   if (!email) {
     res.status(404).json({ message: 'Please include a email' });
+  } else {
+    return users
+      .createUser(email)
+      .then(user => {
+        if (user) {
+          console.log(user);
+          res
+            .status(200)
+            .json({ message: `user successfully created!`, userId: user[0] });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({ message: `User creation encounted an error` });
+      });
   }
-  return users
-    .createUser(email)
-    .then(user => {
-      if (user) {
-        console.log(user);
-        res
-          .status(200)
-          .json({ message: `user successfully created!`, userId: user[0] });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: `User creation encounted an error` });
-    });
 });
 
 router.put('/:id', async (req, res) => {
@@ -128,18 +129,18 @@ router.put('/:id', async (req, res) => {
   };
   if (!user) {
     res.status(404).json({ message: 'No user was found' });
+  } else {
+    return users
+      .updateProfileData(body)
+      .then(profile => {
+        if (!profile) {
+          res.status(404).json({ message: 'No profile found' });
+        } else {
+          res.status(200).json(profile);
+        }
+      })
+      .catch(err => res.status(500).json({ message: 'Server error' }));
   }
-
-  return users
-    .updateProfileData(body)
-    .then(profile => {
-      if (!profile) {
-        res.status(404).json({ message: 'No profile found' });
-      } else {
-        res.status(200).json(profile);
-      }
-    })
-    .catch(err => res.status(500).json({ message: 'Server error' }));
 });
 
 module.exports = router;
