@@ -4,6 +4,7 @@ const dbConfig = require('../data/dbConfig.js');
 
 const router = express.Router();
 
+// Get a list of all the users
 router.get('/', (req, res) => {
   return users
     .get()
@@ -11,6 +12,7 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ message: 'Server error' }));
 });
 
+// Get an individual user by ID
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
@@ -27,7 +29,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Get all users a user is following
-router.get('/following/:userId', (req, res) => {
+router.get('/:userId/following', (req, res) => {
   const { userId } = req.params;
   console.log(userId);
   return users
@@ -44,7 +46,7 @@ router.get('/following/:userId', (req, res) => {
 });
 
 // Get the count of all the users a user is following
-router.get('/following-count/:userId', (req, res) => {
+router.get('/:userId/following-count', (req, res) => {
   const { userId } = req.params;
   console.log(userId);
   return users
@@ -64,7 +66,7 @@ router.get('/following-count/:userId', (req, res) => {
 });
 
 // Get all of a user's followers
-router.get('/followers/:userId', (req, res) => {
+router.get('/:userId/followers', (req, res) => {
   const { userId } = req.params;
   console.log(userId);
   return users
@@ -82,7 +84,7 @@ router.get('/followers/:userId', (req, res) => {
 });
 
 // Get the count of all of a user's followers
-router.get('/followers-count/:userId', (req, res) => {
+router.get('/:userId/followers-count', (req, res) => {
   const { userId } = req.params;
   console.log(userId);
   return users
@@ -99,6 +101,7 @@ router.get('/followers-count/:userId', (req, res) => {
     });
 });
 
+// Create a new user
 router.post('/', (req, res) => {
   const { email } = req.body;
   if (!email) {
