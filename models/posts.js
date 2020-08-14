@@ -3,10 +3,16 @@ const db = require('../data/dbConfig.js');
 module.exports = {
   get,
   getPostsByUserId,
+  insert,
+  getById,
 };
 
 function get() {
   return db('posts');
+}
+
+function getById(id) {
+  return db('posts').where({ id: id }).first();
 }
 
 // Get posts with comment, vote, and award counts
@@ -43,4 +49,8 @@ async function getPostsByUserId(userId) {
     )
     .from('posts')
     .where('posts.user_id', userId);
+}
+
+function insert(post) {
+  return db('posts').insert(post, 'id');
 }

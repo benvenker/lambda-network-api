@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const server = express();
+const cors = require('cors');
 
 const awardsRouter = require('./routes/awards');
 const commentsRouter = require('./routes/comments');
@@ -16,6 +17,7 @@ const usersSkillsRouter = require('./routes/usersSkills');
 const votesRouter = require('./routes/votes');
 
 server.use(express.json());
+server.use(cors());
 
 server.use('/awards', awardsRouter);
 server.use('/comments', commentsRouter);
