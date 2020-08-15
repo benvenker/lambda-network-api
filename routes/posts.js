@@ -2,6 +2,8 @@ const express = require('express');
 const posts = require('../models/posts.js');
 const UUID = require('uuid-1345');
 
+const { validateUserId } = require('../middleware/usersMiddleware');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -11,17 +13,16 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ msg: err }));
 });
 
-router.get('/users/:userId', (req, res) => {
-  const { userId } = req.params;
+router.get('/users/:id', validateUserId(), (req, res) => {
+  const { id } = req.params;
 
   return posts
-    .getPostsByUserId(userId)
+    .getPostsByUserId(id)
     .then(posts => res.status(200).json(posts))
     .catch(err => res.status(500).json({ msg: err }));
 });
 
 router.get('/:id', (req, res) => {
-  console.log('ehllo');
   return posts
     .getById(req.params.id)
     .then(post => {
@@ -54,14 +55,14 @@ router.post('/', async (req, res) => {
 });
 
 // Get the list of posts from the users a user is following
-router.get('/users/:userId/following', async (req, res) => {
-  const { userId } = req.params;
+router.get('/users/:id/following', validateUserId(), async (req, res) => {
+  const { id } = req.params;
 
   try {
-    if (!userId) {
+    if (!id) {
       res.status(400).json({ message: 'No user provided' });
     } else {
-      const followedPosts = await posts.getPostsByUsersAUserFollows(userId);
+      const followedPosts = await posts.getPostsByUsersAUserFollows(id);
       return res.status(200).json(followedPosts);
     }
   } catch (err) {
