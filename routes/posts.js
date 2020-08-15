@@ -34,6 +34,7 @@ router.get('/:id', (req, res) => {
     .catch(err => res.status(500).json({ message: `Server error: ${err}` }));
 });
 
+// Create a new post
 router.post('/', async (req, res) => {
   if (req.body) {
     const post = {
@@ -49,6 +50,22 @@ router.post('/', async (req, res) => {
     }
   } else {
     res.status(400).json({ message: 'No post body was provided' });
+  }
+});
+
+// Get the list of posts from the users a user is following
+router.get('/users/:userId/following', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    if (!userId) {
+      res.status(400).json({ message: 'No user provided' });
+    } else {
+      const followedPosts = await posts.getPostsByUsersAUserFollows(userId);
+      return res.status(200).json(followedPosts);
+    }
+  } catch (err) {
+    res.status(500).json({ message: `Server error: ${err}` });
   }
 });
 
