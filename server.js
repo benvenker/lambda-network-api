@@ -15,9 +15,17 @@ const skillsRouter = require('./routes/skills');
 const usersRouter = require('./routes/users');
 const usersSkillsRouter = require('./routes/usersSkills');
 const votesRouter = require('./routes/votes');
+const { logger } = require('./middleware/logger');
 
 server.use(express.json());
 server.use(cors());
+server.use(logger);
+server.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500).json({
+    message: 'Something went wrong, try again later',
+  });
+});
 
 server.use('/awards', awardsRouter);
 server.use('/comments', commentsRouter);

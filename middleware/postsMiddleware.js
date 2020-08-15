@@ -10,7 +10,6 @@ function validatePostId() {
       .getById(req.params.id)
       .then(post => {
         if (post) {
-          console.log(post);
           req.post = post;
           next();
         } else {
@@ -20,7 +19,6 @@ function validatePostId() {
         }
       })
       .catch(err => {
-        console.log(err);
         res.status(500).json({
           message: 'Server error',
         });
