@@ -20,7 +20,7 @@ function validatePostId() {
       })
       .catch(err => {
         res.status(500).json({
-          message: 'Server error',
+          message: `Server error: ${err}`,
         });
       });
   };

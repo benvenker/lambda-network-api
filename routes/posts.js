@@ -43,8 +43,17 @@ router.get('/users/:id', validateUserId(), async (req, res, next) => {
   }
 });
 
-router.get('/:id', validatePostId(), (req, res) => {
-  return res.status(200).json(req.post);
+router.get('/:id', validatePostId(), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    let votes = await getVotesByPostId(id);
+    console.log(id);
+
+    const newPost = { ...req.post[0], votes: votes.votes };
+    res.status(200).json(newPost);
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Create a new post

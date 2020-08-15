@@ -13,7 +13,36 @@ function get() {
 }
 
 function getById(id) {
-  return db('posts').where({ id: id }).first();
+  const postsUidIdentifier = db.ref('user_id').withSchema('posts');
+  return db
+    .select(
+      'posts.id',
+      'title',
+      'body',
+      'posts.created_date',
+      'posts.image_url',
+      'users.image',
+      function () {
+        this.select('email')
+          .from('users')
+          .where('users.id', postsUidIdentifier);
+      },
+      function () {
+        this.count('id')
+          .from('comments')
+          .where('comments.post_id', id)
+          .as('comments');
+      },
+      function () {
+        this.count('id')
+          .from('post_awards')
+          .where('post_awards.post_id', id)
+          .as('awards');
+      }
+    )
+    .from('posts')
+    .where('posts.id', id)
+    .join('users', 'posts.user_id', 'users.id');
 }
 
 // Get posts with comment, vote, and award counts
@@ -26,6 +55,8 @@ async function getPostsByUserId(userId) {
       'title',
       'body',
       'created_date',
+      'posts.image_url',
+      'users.image',
       function () {
         this.select('email').from('users').where('users.id', userId);
       },
@@ -43,7 +74,8 @@ async function getPostsByUserId(userId) {
       }
     )
     .from('posts')
-    .where('posts.user_id', userId);
+    .where('posts.user_id', userId)
+    .orderBy('posts.created_date', 'desc');
 }
 
 async function getPostsByUsersAUserFollows(userId) {
@@ -64,21 +96,20 @@ async function getPostsByUsersAUserFollows(userId) {
   // Get the list of posts, filtered by those user Ids
   const posts = await db
     .select(
-      'id',
+      'posts.id',
       'user_id',
       'title',
       'body',
-      'created_date',
+      'posts.created_date',
       'image_url',
       'link',
+      'users.email',
+      'users.image',
       function () {
         this.count('id')
           .from('comments')
           .where('comments.post_id', postsIdIdentifier)
           .as('comments');
-      },
-      function () {
-        this.select('email').from('users').where('users.id', userId);
       },
       function () {
         this.count('id')
@@ -89,6 +120,7 @@ async function getPostsByUsersAUserFollows(userId) {
     )
     .from('posts')
     .whereIn('posts.user_id', filterdUserIdArr)
+    .join('users', 'users.id', '=', 'posts.user_id')
     .orderBy('posts.created_date', 'desc');
   return posts;
 }
