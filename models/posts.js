@@ -20,8 +20,8 @@ function getById(id) {
       'title',
       'body',
       'posts.created_date',
-      'posts.image_url',
-      'users.image',
+      'posts.image_url as post_image',
+      'users.image as user_avatar',
       function () {
         this.select('email')
           .from('users')
@@ -51,12 +51,12 @@ async function getPostsByUserId(userId) {
 
   return db
     .select(
-      'id',
+      'posts.id',
       'title',
       'body',
-      'created_date',
-      'posts.image_url',
-      'users.image',
+      'posts.created_date',
+      'posts.image_url as post_image',
+      'users.image as avatar',
       function () {
         this.select('email').from('users').where('users.id', userId);
       },
@@ -75,6 +75,7 @@ async function getPostsByUserId(userId) {
     )
     .from('posts')
     .where('posts.user_id', userId)
+    .join('users', 'posts.user_id', 'users.id')
     .orderBy('posts.created_date', 'desc');
 }
 
