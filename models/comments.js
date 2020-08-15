@@ -3,16 +3,21 @@ const { post } = require('../routes/users.js');
 
 module.exports = {
   get,
-  getCommentByPostId,
+  getCommentsByPostId,
   getCommentsByUserId,
+  getCommentsCountByPostId,
 };
 
 function get() {
   return db('comments');
 }
 
+function getCommentsCountByPostId(postId) {
+  return db.count('id').from('comments').where({ post_id: postId });
+}
+
 // * bens working solution
-function getCommentByPostId(postId) {
+function getCommentsByPostId(postId) {
   const commentsIdIdentifier = db.ref('id').withSchema('comments');
   const commentsUserIdIdentifier = db.ref('user_id').withSchema('comments');
   const postIdentifier = db.ref('post_id').withSchema('comments');
