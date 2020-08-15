@@ -4,6 +4,9 @@ const UUID = require('uuid-1345');
 
 const { validateUserId } = require('../middleware/usersMiddleware');
 const { validatePostId } = require('../middleware/postsMiddleware');
+const { getVotesByPostId } = require('../models/votes');
+const { orWhereNotExists } = require('../data/dbConfig.js');
+const { post } = require('../server.js');
 
 const router = express.Router();
 
@@ -14,13 +17,30 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ msg: err }));
 });
 
-router.get('/users/:id', validateUserId(), (req, res) => {
-  const { id } = req.params;
+router.get('/users/:id', validateUserId(), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const usersPosts = await posts.getPostsByUserId(id);
+    const newUsersPosts = [];
 
-  return posts
-    .getPostsByUserId(id)
-    .then(posts => res.status(200).json(posts))
-    .catch(err => res.status(500).json({ msg: err }));
+    await getVotes(usersPosts);
+    console.log(newUsersPosts);
+    res.status(200).json(newUsersPosts);
+
+    async function getVotes(posts) {
+      for (i = 0; i < posts.length; i++) {
+        const post = posts[i];
+        // console.log(post);
+        let votes = await getVotesByPostId(posts[i].id);
+        votes = votes.votes;
+
+        newUsersPosts.push({ ...posts[i], votes });
+      }
+      return newUsersPosts;
+    }
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get('/:id', validatePostId(), (req, res) => {
@@ -55,7 +75,21 @@ router.get('/users/:id/following', validateUserId(), async (req, res) => {
       res.status(400).json({ message: 'No user provided' });
     } else {
       const followedPosts = await posts.getPostsByUsersAUserFollows(id);
-      return res.status(200).json(followedPosts);
+      const newFollowedPosts = [];
+      await getVotes(followedPosts);
+      res.status(200).json(newFollowedPosts);
+
+      async function getVotes(posts) {
+        for (i = 0; i < posts.length; i++) {
+          const post = posts[i];
+          // console.log(post);
+          let votes = await getVotesByPostId(posts[i].id);
+          votes = votes.votes;
+
+          newFollowedPosts.push({ ...posts[i], votes });
+        }
+        return newFollowedPosts;
+      }
     }
   } catch (err) {
     res.status(500).json({ message: `Server error: ${err}` });

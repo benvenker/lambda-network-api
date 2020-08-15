@@ -1,5 +1,5 @@
 const db = require('../data/dbConfig.js');
-
+const { getVotesByPostId } = require('../models/votes');
 module.exports = {
   get,
   getPostsByUserId,
@@ -22,18 +22,12 @@ async function getPostsByUserId(userId) {
 
   return db
     .select(
+      'id',
       'title',
       'body',
       'created_date',
       function () {
         this.select('email').from('users').where('users.id', userId);
-      },
-      // votes
-      function () {
-        this.count('votes.id')
-          .from('votes')
-          .where('votes.post_id', postsIdIdentifier)
-          .as('votes');
       },
       function () {
         this.count('id')
@@ -53,6 +47,8 @@ async function getPostsByUserId(userId) {
 }
 
 async function getPostsByUsersAUserFollows(userId) {
+  const postsIdIdentifier = db.ref('id').withSchema('posts');
+
   // get the list of userIds to filter  posts on
   const userIds = await db('follows')
     .select('follower_id')
@@ -66,7 +62,32 @@ async function getPostsByUsersAUserFollows(userId) {
   const filterdUserIdArr = userIdArr.filter(id => id !== userId);
 
   // Get the list of posts, filtered by those user Ids
-  const posts = await db('posts')
+  const posts = await db
+    .select(
+      'id',
+      'user_id',
+      'title',
+      'body',
+      'created_date',
+      'image_url',
+      'link',
+      function () {
+        this.count('id')
+          .from('comments')
+          .where('comments.post_id', postsIdIdentifier)
+          .as('comments');
+      },
+      function () {
+        this.select('email').from('users').where('users.id', userId);
+      },
+      function () {
+        this.count('id')
+          .from('post_awards')
+          .where('post_awards.post_id', postsIdIdentifier)
+          .as('awards');
+      }
+    )
+    .from('posts')
     .whereIn('posts.user_id', filterdUserIdArr)
     .orderBy('posts.created_date', 'desc');
   return posts;
