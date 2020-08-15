@@ -3,6 +3,7 @@ const posts = require('../models/posts.js');
 const UUID = require('uuid-1345');
 
 const { validateUserId } = require('../middleware/usersMiddleware');
+const { validatePostId } = require('../middleware/postsMiddleware');
 
 const router = express.Router();
 
@@ -22,17 +23,8 @@ router.get('/users/:id', validateUserId(), (req, res) => {
     .catch(err => res.status(500).json({ msg: err }));
 });
 
-router.get('/:id', (req, res) => {
-  return posts
-    .getById(req.params.id)
-    .then(post => {
-      if (post) {
-        res.status(200).json(post);
-      } else {
-        res.status(400).json({ message: 'No post found' });
-      }
-    })
-    .catch(err => res.status(500).json({ message: `Server error: ${err}` }));
+router.get('/:id', validatePostId(), (req, res) => {
+  return res.status(200).json(req.post);
 });
 
 // Create a new post
