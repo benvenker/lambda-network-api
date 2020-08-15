@@ -92,7 +92,7 @@ async function getPostsByUsersAUserFollows(userId) {
 
   // just for safety, filter out the user Id we're passing in,
   // so you can't be following yourself
-  const filterdUserIdArr = userIdArr.filter(id => id !== userId);
+  const filteredUserIdArr = userIdArr.filter(id => id !== userId);
 
   // Get the list of posts, filtered by those user Ids
   const posts = await db
@@ -102,10 +102,10 @@ async function getPostsByUsersAUserFollows(userId) {
       'title',
       'body',
       'posts.created_date',
-      'image_url',
+      'image_url as post_image',
       'link',
       'users.email',
-      'users.image',
+      'users.image as user_avatar',
       function () {
         this.count('id')
           .from('comments')
@@ -120,7 +120,7 @@ async function getPostsByUsersAUserFollows(userId) {
       }
     )
     .from('posts')
-    .whereIn('posts.user_id', filterdUserIdArr)
+    .whereIn('posts.user_id', filteredUserIdArr)
     .join('users', 'users.id', '=', 'posts.user_id')
     .orderBy('posts.created_date', 'desc');
   return posts;

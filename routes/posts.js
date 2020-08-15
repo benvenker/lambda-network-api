@@ -24,7 +24,6 @@ router.get('/users/:id', validateUserId(), async (req, res, next) => {
     const newUsersPosts = [];
 
     await getVotes(usersPosts);
-    console.log(newUsersPosts);
     res.status(200).json(newUsersPosts);
 
     async function getVotes(posts) {
