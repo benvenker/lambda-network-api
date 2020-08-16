@@ -46,6 +46,7 @@ router.get('/:id/following', validateUserId(), (req, res) => {
 //   console.log(userId);
 //   return users
 //     .getCountOfAllAUsersFollowers(userId)
+
 // Get all of a user's followers
 router.get('/:userId/followers', (req, res) => {
   const { userId } = req.params;
@@ -104,7 +105,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const user = await users.getUserById(id);
+  const user = await users.getById(id);
   const body = {
     id: id,
     ...req.body,
