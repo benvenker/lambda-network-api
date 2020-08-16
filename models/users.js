@@ -3,6 +3,8 @@ const UUID = require('uuid-1345');
 
 module.exports = {
   get,
+  insert,
+  getById,
   getAllUsersAUserIsFollowing,
   getAllAUsersFollowers,
   getCountOfAllAUsersFollowers,
@@ -19,14 +21,27 @@ function get() {
 function getUserById(id) {
   return db('users').where({ id: id });
 }
+function insert(user) {
+  return db('users').insert(user, 'id');
+}
 
-function getAllUsersAUserIsFollowing(followedId) {
-  const followedIdIdentifier = db.ref('followed_id').withSchema('follows');
+function getById(id) {
+  return db('users').where({ id: id }).first();
+}
+
+/**
+ *
+ * @param {uuid} userId The id of the "followed" user. In this case we're
+ * retrieving all of the users who "followed" the userId being passed in (the
+ * userId).
+ */
+function getAllUsersAUserIsFollowing(userId) {
+  const userIdIdentifier = db.ref('followed_id').withSchema('follows');
   return db
     .select('users.email')
     .from('follows')
-    .where('follows.follower_id', followedId)
-    .join('users', 'users.id', followedIdIdentifier);
+    .where('follows.follower_id', userId)
+    .join('users', 'users.id', userIdIdentifier);
 }
 
 function getCountOfAllUsersAUserIsFollowing(followedId) {

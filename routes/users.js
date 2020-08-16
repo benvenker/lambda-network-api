@@ -1,6 +1,8 @@
 const express = require('express');
 const users = require('../models/users.js');
 const dbConfig = require('../data/dbConfig.js');
+const { validateUserId } = require('../middleware/usersMiddleware');
+const UUID = require('uuid-1345');
 
 const router = express.Router();
 
@@ -12,45 +14,16 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ message: 'Server error' }));
 });
 
-// Get an individual user by ID
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId(), (req, res) => {
+  return res.status(200).json(req.user);
+});
+
+// Get a list of the users a user is following
+router.get('/:id/following', validateUserId(), (req, res) => {
   const { id } = req.params;
-
+  console.log(id);
   return users
-    .getUserById(id)
-    .then(user => {
-      if (!user) {
-        res.status(404).json({ message: 'No user found' });
-      } else {
-        res.status(200).json(user);
-      }
-    })
-    .catch(err => res.status(500).json({ message: `Server error` }));
-});
-
-// Get all users a user is following
-router.get('/:userId/following', (req, res) => {
-  const { userId } = req.params;
-  console.log(userId);
-  return users
-    .getAllUsersAUserIsFollowing(userId)
-    .then(followers => {
-      if (!followers) {
-        res.status(404).json({ message: 'No followers found' });
-      } else if (followers) {
-        console.log(followers);
-        res.status(200).json(followers);
-      }
-    })
-    .catch(err => res.status(500).json({ message: `Server error` }));
-});
-
-// Get the count of all the users a user is following
-router.get('/:userId/following-count', (req, res) => {
-  const { userId } = req.params;
-  console.log(userId);
-  return users
-    .getCountOfAllAUsersFollowers(userId)
+    .getAllUsersAUserIsFollowing(id)
     .then(followers => {
       if (!followers) {
         res.status(404).json({ message: 'No followers found' });
@@ -65,6 +38,14 @@ router.get('/:userId/following-count', (req, res) => {
     });
 });
 
+// This is a partial function that got lost in a merge somehow...need
+// to handle appropriately
+// // Get the count of all the users a user is following
+// router.get('/:userId/following-count', (req, res) => {
+//   const { userId } = req.params;
+//   console.log(userId);
+//   return users
+//     .getCountOfAllAUsersFollowers(userId)
 // Get all of a user's followers
 router.get('/:userId/followers', (req, res) => {
   const { userId } = req.params;
@@ -102,24 +83,22 @@ router.get('/:userId/followers-count', (req, res) => {
 });
 
 // Create a new user
-router.post('/', (req, res) => {
-  const { email } = req.body;
-  if (!email) {
-    res.status(404).json({ message: 'Please include a email' });
+router.post('/', async (req, res) => {
+  if (req.body) {
+    const user = {
+      id: UUID.v4(),
+      created_date: new Date(),
+      permission_type: 'user',
+      ...req.body,
+    };
+    try {
+      const newUser = await users.insert(user);
+      return res.status(200).json({ id: newUser[0] });
+    } catch (err) {
+      return res.status(500).json({ message: `Error creating user: ${err}` });
+    }
   } else {
-    return users
-      .createUser(email)
-      .then(user => {
-        if (user) {
-          console.log(user);
-          res
-            .status(200)
-            .json({ message: `user successfully created!`, userId: user[0] });
-        }
-      })
-      .catch(err => {
-        res.status(500).json({ message: `User creation encounted an error` });
-      });
+    res.status(400).json({ message: 'No user body was provided' });
   }
 });
 
