@@ -6,6 +6,7 @@ module.exports = {
   getById,
   insert,
   update,
+  getJobByName,
 };
 
 function get() {
@@ -28,4 +29,10 @@ function update(job) {
 
 function getById(id) {
   return db('jobs').where({ id }).first();
+}
+
+function getJobByName(name) {
+  console.log('test job');
+  const inputName = name.toLowerCase();
+  return db.select('*').from('jobs').where('name', 'like', `%${inputName}%`);
 }
