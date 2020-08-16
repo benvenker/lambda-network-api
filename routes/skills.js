@@ -1,7 +1,7 @@
 const express = require('express');
 const skills = require('../models/skills.js');
 const UUID = require('uuid-1345');
-const { getSkillByName } = require('../models/skills.js');
+// const skillslByName } = require('../models/skills.js');
 
 const router = express.Router();
 
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
   const { name } = req.body;
   if (!name) {
     res.status(400).json({ message: 'you must provide a skill' });
-  } else if (getSkillByName(name).length > 0) {
+  } else if (skills.getSkillByName(name).length > 0) {
     res.status(422).json({ message: 'The skill already exists' });
   } else {
     const skill = {
@@ -66,6 +66,15 @@ router.post('/', async (req, res) => {
       }
     }
   }
+});
+
+router.post('/validate', (req, res, next) => {
+  const skillsArray = req.body;
+
+  skills
+    .checkForExistingSkillsAndAddNewSkills(skillsArray)
+    .then(skill => res.status(200).json(skill))
+    .catch(err => console.log(err));
 });
 
 module.exports = router;
