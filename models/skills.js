@@ -3,6 +3,7 @@ const db = require('../data/dbConfig.js');
 module.exports = {
   get,
   insert,
+  getById,
   getSkillByName,
 };
 
@@ -10,9 +11,13 @@ function get() {
   return db('skills');
 }
 
+function getById(id) {
+  return db('skills').where({ id });
+}
+
 function getSkillByName(name) {
   const inputName = name.toLowerCase();
-  return db('skills').where({ name: inputName });
+  return db.select('*').from('skills').where('name', 'like', `%${inputName}%`);
 }
 
 function insert(skill) {
@@ -22,3 +27,5 @@ function insert(skill) {
     console.log(err);
   }
 }
+
+function getUsersSkills(userId) {}

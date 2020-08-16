@@ -18,6 +18,7 @@ const db = require('./data/dbConfig');
 // populateFollows(100);
 // populateSkills();
 // populateJobs();
+// populateUsersJobs();
 
 function populateAwards() {
   const awards = ['Hero', 'Gratitude', 'Diamond', 'Charity'];
@@ -216,4 +217,16 @@ async function populateUsersJobs() {
   });
 }
 
-populateUsersJobs();
+async function populateUsersSkills() {
+  const users = await db.select('id').from('users');
+  const skills = await db.select('id').from('skills');
+
+  users.map(async user => {
+    const skillId = skills[Math.floor(Math.random() * skills.length)].id;
+    const userId = users[Math.floor(Math.random() * users.length)].id;
+
+    return db('users_skills').insert({ skill_id: skillId, user_id: userId });
+  });
+}
+
+populateUsersSkills();

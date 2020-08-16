@@ -5,27 +5,39 @@ const { getSkillByName } = require('../models/skills.js');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  try {
-    const skills = await skills.get();
-    return res.status(200).json(skills);
-  } catch (err) {
-    return res.status(500).json({ msg: err });
-  }
+router.get('/', (req, res, next) => {
+  return skills
+    .get()
+    .then(skills => res.status(200).json(skills))
+    .catch(err => next(err));
 });
 
-router.get('/by-name', async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
     const { name } = req.query;
     if (!name) {
       res.status(400).json({ message: 'Please include a name' });
     } else {
       const skill = await skills.getSkillByName(name);
-      return res.status(200).json(skill[0]); // Returns the skill name and id
+      return res.status(200).json(skill);
     }
   } catch (err) {
     res.status(500).json({ message: 'Name could not be retrieved' });
   }
+});
+
+router.get('/:id', (req, res, next) => {
+  const { id } = req.params;
+  return skills
+    .getById(id)
+    .then(skill => {
+      if (skill) {
+        return res.status(200).json(skill);
+      } else {
+        return res.status(400).json({ message: 'Skill not found' });
+      }
+    })
+    .catch(err => next(err));
 });
 
 router.post('/', async (req, res) => {

@@ -24,6 +24,7 @@ function getById(id) {
     .where('users.id', id)
     .join('jobs', 'users.job_id', 'jobs.id');
 }
+
 function insert(user) {
   return db('users').insert(user, 'id');
 }
