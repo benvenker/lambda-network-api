@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
 router.post('/validate', (req, res, next) => {
   const skillsArray = req.body;
 
-  skills
+  return skills
     .checkForExistingSkillsAndAddNewSkills(skillsArray)
     .then(skill => res.status(200).json(skill))
     .catch(err => console.log(err));
