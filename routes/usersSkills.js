@@ -32,10 +32,8 @@ router.post('/:userId', async (req, res, next) => {
             user_id: userId,
             skill_id: skill,
           });
-          console.log('skill exists ');
           return newSkillId;
         } else {
-          console.log('skill doesnt exist');
         }
       })
     );
