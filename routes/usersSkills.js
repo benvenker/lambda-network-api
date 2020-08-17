@@ -12,6 +12,16 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ msg: err }));
 });
 
+router.delete('/', (req, res, next) => {
+  const skill = req.body;
+  return usersSkills
+    .remove(skill)
+    .then(data => res.status(204).end())
+    .catch(err =>
+      res.status(500).status({ message: 'Server error deleting skill' })
+    );
+});
+
 router.get('/users/:id', (req, res) => {
   return usersSkills
     .getByUserId()

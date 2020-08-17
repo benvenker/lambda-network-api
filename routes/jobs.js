@@ -16,7 +16,7 @@ router.post('/', (req, res, next) => {
   const job = req.body;
   return jobs
     .insert(job)
-    .then(job => res.status(200).json(res))
+    .then(id => res.status(200).json({ id: id[0] }))
     .catch(err => next(err));
 });
 

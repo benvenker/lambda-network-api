@@ -4,6 +4,7 @@ module.exports = {
   get,
   getByUserId,
   insert,
+  remove,
   checkSkillExists,
 };
 
@@ -13,6 +14,14 @@ function get() {
 
 function getByUserId(userId) {
   return db('users_skills').where({ user_id: userId });
+}
+
+function remove(userSkill) {
+  try {
+    return db('users_skills').where(userSkill).delete();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function checkSkillExists(skillId) {
