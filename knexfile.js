@@ -11,5 +11,6 @@ module.exports = {
       port: process.env.DB_PORT,
       ssl: true,
     },
+    pool: { min: 0, max: 7 },
   },
 };
