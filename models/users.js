@@ -10,7 +10,6 @@ module.exports = {
   getCountOfAllAUsersFollowers,
   getCountOfAllUsersAUserIsFollowing,
   createUser,
-  getUserById,
   updateProfileData,
 };
 
@@ -18,16 +17,21 @@ function get() {
   return db('users');
 }
 
-function getUserById(id) {
-  return db('users').where({ id: id });
+function getById(id) {
+  return db
+    .select('*', 'jobs.name')
+    .from('users')
+    .where('users.id', id)
+    .join('jobs', 'users.job_id', 'jobs.id');
 }
+
 function insert(user) {
   return db('users').insert(user, 'id');
 }
 
-function getById(id) {
-  return db('users').where({ id: id }).first();
-}
+// function getById(id) {
+//   return db('users').where({ id: id }).first();
+// }
 
 /**
  *
